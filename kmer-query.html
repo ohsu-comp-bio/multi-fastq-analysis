@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <link rel="stylesheet" href="style.css">
+
+        <script src="http://alasql.org/console/alasql.min.js"></script>
+    </head>
+
+    <body>
+        <h1>Test of alasql.js database: Sandbox</h1>
+        <p>Enter SQL query:</p>
+        <textarea id="sql" style="width:500px; height: 50px">SELECT name,hired_on, YEAR(hired_on), MONTH(hired_on), DAY(hired_on) FROM employees ORDER BY hired_on DESC</textarea>
+        <p><button onclick="runsql()">Execute SQL</button></p>
+
+        <div id="result"></div>
+
+        <script src="run-sql.js"></script>
+    </body>
+
+</html>
