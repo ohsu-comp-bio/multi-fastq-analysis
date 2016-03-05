@@ -8,20 +8,26 @@ $("#run-query").on('click',function()
 	runSQL(sql_string);
 });
 
-$("#load-table").on('click',function(){loadFile();});
+$("#load-file").on('click',function(event){loadFile(event);});
 
-$("#save-table").on('click',function(){saveTable();});
+$("#save-file").on('click',function(){saveTable();});
 
 function loadFile(event) {
-//	console.log('loadFile');
+	console.log('loadFile');
+	console.log(event);
 	alasql('SELECT * FROM FILE(?,{headers:true})',[event],function(res){
 		data = res;
 		document.getElementById("res").textContent = JSON.stringify(res);
 	});
+	return res;
 }
 
-function saveTable(type, filename)
-{
+function saveTable(type)
+{	
+	type = typeof type != 'undefined' ? type : "XLSX";
+	console.log("saving table");
+    
+    /*
     type.toUpperCase(type);
     var extension = "";
     
@@ -41,7 +47,6 @@ function saveTable(type, filename)
             return false;
     }
     
-
     var substrings = filename.split('.'); // split the string at '.'
     
     if (substrings.length > 1)
@@ -52,6 +57,9 @@ function saveTable(type, filename)
     }
     
     filename = filename + "." + extension.toLowerCase();
+    */
+    
+    filename = "table.xlsx";
     
     alasql("SELECT * INTO " + extension + " ('" + filename + "') FROM ?",[data]);
 }

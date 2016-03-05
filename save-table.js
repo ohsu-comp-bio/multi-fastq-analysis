@@ -1,7 +1,8 @@
 
-function saveTable(type, filename)
+function saveTable(type)
 {
-    type = toUpperCase(type);
+	console.log("saving table");
+    type = toUpperCase(type = "XLSX");
     var extension = "";
     
     switch (type)
