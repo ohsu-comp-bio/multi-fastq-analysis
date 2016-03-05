@@ -1,5 +1,5 @@
 
-function exportData(type, filename)
+function saveTable(type, filename)
 {
     type = toUpperCase(type);
     var extension = "";

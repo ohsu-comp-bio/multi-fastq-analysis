@@ -6,3 +6,8 @@ table th {
 table td {
   text-align: right;
 }
+
+#sql-string {
+	width:500px;
+	height: 50px;
+}

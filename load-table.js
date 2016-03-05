@@ -1,5 +1,9 @@
 
+function loadTable(event) {
+//	console.log('loadFile');
+	alasql('SELECT * FROM FILE(?,{headers:true})',[event],function(data)
+	{
+		return JSON.stringify(data);
+	});
+}
 
-        alasql('SELECT * FROM FILE(?,{headers:true})',[event],function(res){
-        data = res;
-        document.getElementById("res").textContent = JSON.stringify(res);

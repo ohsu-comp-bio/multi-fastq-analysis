@@ -1,31 +1,104 @@
 var tm = Date.now();
 var db = new alasql.Database();
 
-var runsql = function() {
-  var s = '';
-  var sqls = document.getElementById('sql').value;
-  //		console.log(sqls.split(';'));
-  sqls.split(';').forEach(function(sql) {
-    sql = sql.trim();
-    if (sql) {
-      var res = db.exec(sql);
-      //		console.log(document.getElementById('sql').value);
-      s += '<table style="border:1px solid black">';
-      s += '<tr>';
-      for (var key in res[0]) {
-        s += '<th style="width:100px">' + key;
-      }
-      res.forEach(function(row) {
-        s += '<tr>';
-        for (var key in row) {
-          s += '<td>' + (typeof row[key] == 'undefined' ? '' : row[key]);
-        }
-      });
-      s += '</table>';
+$("#run-query").on('click',function()
+{
+	sql_string = $("#sql-string").val();
+	console.log("sql_string: " + sql_string);
+	runSQL(sql_string);
+});
+
+$("#load-table").on('click',function(){loadFile();});
+
+$("#save-table").on('click',function(){saveTable();});
+
+function loadFile(event) {
+//	console.log('loadFile');
+	alasql('SELECT * FROM FILE(?,{headers:true})',[event],function(res){
+		data = res;
+		document.getElementById("res").textContent = JSON.stringify(res);
+	});
+}
+
+function saveTable(type, filename)
+{
+    type.toUpperCase(type);
+    var extension = "";
+    
+    switch (type)
+    {
+        case "CSV":
+            extension = "CSV";
+            break;
+        case "XLS":
+            extension = "XLSX";
+            break;
+        case "XLSX":
+            extension = "XLSX";
+            break;
+        default:
+            alert("Export type must be CSV or XLSX");
+            return false;
     }
-  });
-  document.getElementById('result').innerHTML = s;
-};
+    
+
+    var substrings = filename.split('.'); // split the string at '.'
+    
+    if (substrings.length > 1)
+    {
+        extension = substrings[-1];
+        substrings.pop();
+        filenamename = substrings.join(""); // rejoin the remaining elements without separator
+    }
+    
+    filename = filename + "." + extension.toLowerCase();
+    
+    alasql("SELECT * INTO " + extension + " ('" + filename + "') FROM ?",[data]);
+}
+
+function runSQL(sql_string)
+{
+	var s = '';
+	//var sql_string = document.getElementById('sql-string').value;
+	console.log(sql_string);
+	commands = sql_string.split(';');
+	console.log("commands: " + commands);
+	
+	commands.forEach(function(command)
+	{
+		console.log("command: " + command);
+		command = command.trim();
+		
+		if (command)
+		{
+			var result = db.exec(command);
+			//		console.log(document.getElementById('sql').value);
+			s += '<table style="border:1px solid black">';
+			s += '<tr>';
+
+			for (var key in result[0])
+			{
+				s += '<th style="width:100px">' + key;
+			}
+
+			result.forEach(function(row)
+			{
+				s += '<tr>';
+				for (var key in row)
+				{
+					s += '<td>' + (typeof row[key] == 'undefined' ? '' : row[key]);
+				}
+			});
+
+			s += '</table>';
+
+		}
+	});
+	
+	document.getElementById('result').innerHTML = s;
+	
+}
+
 db.exec("DROP TABLE IF EXISTS employees");
 db.exec("CREATE TABLE employees( id integer,  name text,\
                           designation text,     manager integer,\
@@ -46,6 +119,6 @@ db.exec("INSERT INTO employees VALUES (12,'WASHINGTON','ADMIN',6,'1998-04-16',18
 db.exec("INSERT INTO employees VALUES (13,'MONROE','ENGINEER',10,'2000-12-03',30000,NULL,2);");
 db.exec("INSERT INTO employees VALUES (14,'ROOSEVELT','CPA',9,'1995-10-12',35000,NULL,1);");
 //	SELECT designation,COUNT(*) AS nbr, (AVG(salary)) AS avg_salary FROM employees GROUP BY designation ORDER BY avg_salary DESC;
-runsql();
+//runSQL();
 
 
