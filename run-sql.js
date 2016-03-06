@@ -1,5 +1,15 @@
 var tm = Date.now();
-var db = new alasql.Database();
+var db = new alasql.Database('database');
+
+var data = "";
+event = [];
+
+var testvar;
+
+function closed()
+{
+	console.log("in closed" + data);
+}
 
 $("#run-query").on('click',function()
 {
@@ -8,61 +18,90 @@ $("#run-query").on('click',function()
 	runSQL(sql_string);
 });
 
-$("#load-file").on('click',function(event){loadFile(event);});
+$("#load-file").on('change',function(event)
+{
+	for (var i = 0 ; i < event.length ; i++)
+	{
+		console.log("event " + i + ": " + e);
+	}
+	console.log("in onclick");
+	//loadFile(event);
+	closed()
+});
 
 $("#save-file").on('click',function(){saveTable();});
 
 function loadFile(event) {
 	console.log('loadFile');
-	console.log(event);
 	alasql('SELECT * FROM FILE(?,{headers:true})',[event],function(res){
 		data = res;
 		document.getElementById("res").textContent = JSON.stringify(res);
 	});
-	return res;
 }
 
-function saveTable(type)
-{	
-	type = typeof type != 'undefined' ? type : "XLSX";
-	console.log("saving table");
-    
-    /*
-    type.toUpperCase(type);
-    var extension = "";
-    
-    switch (type)
-    {
-        case "CSV":
-            extension = "CSV";
-            break;
-        case "XLS":
-            extension = "XLSX";
-            break;
-        case "XLSX":
-            extension = "XLSX";
-            break;
-        default:
-            alert("Export type must be CSV or XLSX");
-            return false;
-    }
-    
-    var substrings = filename.split('.'); // split the string at '.'
-    
-    if (substrings.length > 1)
-    {
-        extension = substrings[-1];
-        substrings.pop();
-        filenamename = substrings.join(""); // rejoin the remaining elements without separator
-    }
-    
-    filename = filename + "." + extension.toLowerCase();
-    */
-    
-    filename = "table.xlsx";
-    
-    alasql("SELECT * INTO " + extension + " ('" + filename + "') FROM ?",[data]);
+
+//function loadFile(event) {
+	//console.log('loadFile');
+	//for (var i = 0 ; i < event.length ; i++)
+	//{
+		//console.log("event " + i + ": " + e);
+	//}
+	//alasql('SELECT * FROM FILE(?,{headers:true})',[event],function(res){
+		//data = res;
+		//document.getElementById("res").textContent = JSON.stringify(res);
+		//console.log("after setting test content: " + data);
+		//closed();
+	//});
+	//console.log(data);
+//}
+
+function saveFile() {
+	console.log('saveFile');
+	alasql('SELECT * INTO XLSX("myfile.xlsx",{headers:true}) FROM ?',[data]);
 }
+
+
+//function saveTable(type)
+//{	
+	//type = typeof type != 'undefined' ? type : "XLSX";
+	//console.log("saving table");
+    
+    ///*
+    //type.toUpperCase(type);
+    //var extension = "";
+    
+    //switch (type)
+    //{
+        //case "CSV":
+            //extension = "CSV";
+            //break;
+        //case "XLS":
+            //extension = "XLSX";
+            //break;
+        //case "XLSX":
+            //extension = "XLSX";
+            //break;
+        //default:
+            //alert("Export type must be CSV or XLSX");
+            //return false;
+    //}
+    
+    //var substrings = filename.split('.'); // split the string at '.'
+    
+    //if (substrings.length > 1)
+    //{
+        //extension = substrings[-1];
+        //substrings.pop();
+        //filenamename = substrings.join(""); // rejoin the remaining elements without separator
+    //}
+    
+    //filename = filename + "." + extension.toLowerCase();
+    //*/
+    
+    //filename = "table.xlsx";
+    
+    //alasql("SELECT * INTO " + extension + " ('" + filename + "') FROM ?",[data]);
+//}
 
 function runSQL(sql_string)
 {
@@ -79,7 +118,8 @@ function runSQL(sql_string)
 		
 		if (command)
 		{
-			var result = db.exec(command);
+			//var result = db.exec(command);
+			var result = alasql(command, data);
 			//		console.log(document.getElementById('sql').value);
 			s += '<table style="border:1px solid black">';
 			s += '<tr>';
@@ -106,6 +146,14 @@ function runSQL(sql_string)
 	document.getElementById('result').innerHTML = s;
 	
 }
+
+
+function makeTableFromJSON(table_name, data)
+{
+	
+	
+}
+
 
 db.exec("DROP TABLE IF EXISTS employees");
 db.exec("CREATE TABLE employees( id integer,  name text,\

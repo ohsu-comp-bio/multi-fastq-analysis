@@ -4,17 +4,26 @@
     <head>
         <link rel="stylesheet" href="style.css">
         <!--script src="http://alasql.org/console/alasql.min.js"></script-->
-        <script src="http://cdn.jsdelivr.net/alasql/latest/alasql.min.js"></script>
+        <script src="http://cdn.jsdelivr.net/alasql/latest/alasql.min.js"></script-->
         <script src="http://alasql.org/console/xlsx.core.min.js"></script>
         <script src="http://alasql.org/console/Blob.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     </head>
     
 
-    <body>
+    <body
+    
+    	<h1>File load and save</h1>
+		<p>Upload file here</p>
+		<input id="load-file" type="file" />
+		<input id="load-file-2" type="file" onChange="loadFile()"/>
+		<p>Save file here:</p>
+		<button onclick="saveFile()">Save file</button>
+		<div id="res"></div>
+    
         <h1>Test of alasql.js database: Sandbox</h1>
         <button id="save-file">Save Table</button>
-        <input id="load-file" type="file" />
+        <input id="not-used" type="file" />
         <p>Enter SQL query:</p>
         <textarea id="sql-string">
 			SELECT name,hired_on, YEAR(hired_on), MONTH(hired_on), DAY(hired_on) FROM employees ORDER BY hired_on DESC
@@ -22,6 +31,7 @@
         <p><button id="run-query">Execute SQL</button></p>
 
         <div id="result"></div>
+        <div id="res"></div>
 
         <script src="run-sql.js"></script>
     </body>

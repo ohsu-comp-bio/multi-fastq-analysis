@@ -1,0 +1,17 @@
+<html>
+	<head>
+		<script src="http://cdn.jsdelivr.net/alasql/latest/alasql.min.js"></script>
+		<!--script src="http://alasql.org/console/alasql.min.js"></script-->
+		<script src="http://alasql.org/console/xlsx.core.min.js"></script>
+		<script src="test.js"></script>
+		<!--script src="../../console/Blob.js"></script-->
+	</head>
+	<body>
+		<h1>File load and save</h1>
+		<p>Upload file here</p>
+		<input id="readfile" type="file" onchange="loadFile(event)"/>
+		<p>Save file here:</p>
+		<button onclick="saveFile()">Save file</button>
+		<div id="res"></div>
+	</body>
+</html>
