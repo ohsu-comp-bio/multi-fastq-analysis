@@ -43,7 +43,7 @@ function loadFile(event) {
         console.log(data_string);
         data = JSON.parse(data_string);
         console.log(data);
-        document.getElementById("res").textContent = JSON.stringify(res);
+        //document.getElementById("res").textContent = JSON.stringify(res);
         var filename = $('#load-file').val();
         filename = filename.replace(/^.*[\\\/]/,'');
         //filename = filename.replace(/^.*\/([^/]*)$/, "$1");
@@ -52,10 +52,16 @@ function loadFile(event) {
         console.log(filename);
         filename = filename[0];
         console.log("filename: " + filename);
+        $('#load-file').val('');
+        
         createTable(filename, data);
+        
+        addTableRow(filename);
     });
 }
 
+
+var data_table_styles = {'width': '100%', 'padding': '0.5em', 'margin': '0.5em', 'background-color': '#8FBC8F'};
 
 function createTable(filename, data) {
   console.log("create table");
@@ -66,7 +72,15 @@ function createTable(filename, data) {
   cmd_string = "INSERT INTO " + filename + " SELECT * FROM ?";
   console.log(cmd_string);
   db.exec(cmd_string, [data]);
+  //$('#tables').append("<div id='" + filename + "' class='data-table'>" + filename + "<span class='close-table'>X</span></div>");
+  //$('#'+filename).css(data_table_styles);
 }
+
+$('.close-table').on('click', function(){
+    var table_name = this.parent().attr('id');
+    db.exec("DROP TABLE " + table_name);
+    this.remove();
+});
 
 
 //function loadFile(event) {
@@ -132,12 +146,12 @@ function saveFile() {
     //alasql("SELECT * INTO " + extension + " ('" + filename + "') FROM ?",[data]);
 //}
 
-function runSQL()
+function runSQL(sql_string)
 {
     console.log('run_sql');
     var s = '';
-    var sql_string = document.getElementById('sql-string').value;
-    console.log(sql_string);
+    //var sql_string = document.getElementById('sql-string').value;
+    console.log("sql string: " + sql_string);
     commands = sql_string.split(';');
     console.log("commands: " + commands);
     
@@ -300,6 +314,28 @@ db.exec("INSERT INTO employees VALUES (12,'WASHINGTON','ADMIN',6,'1998-04-16',18
 db.exec("INSERT INTO employees VALUES (13,'MONROE','ENGINEER',10,'2000-12-03',30000,NULL,2);");
 db.exec("INSERT INTO employees VALUES (14,'ROOSEVELT','CPA',9,'1995-10-12',35000,NULL,1);");
 //  SELECT designation,COUNT(*) AS nbr, (AVG(salary)) AS avg_salary FROM employees GROUP BY designation ORDER BY avg_salary DESC;
-runSQL();
+
+sql_string = $("#sql-string").val();
+runSQL(sql_string);
+runSQL("SELECT designation,COUNT(*) AS nbr, (AVG(salary)) AS avg_salary FROM employees GROUP BY designation ORDER BY avg_salary DESC;");
 
 
+function addTableRow(table_name)
+{
+    var remove_button_string = ""
+        + "<button type='button' id='" + item.ItemId + "-remove' class='remove-button btn btn-default btn-xs'>"
+        + "<span class='glyphicon glyphicon-remove'></span>"
+        + "</button>";
+        
+    console.log(remove_button_string);
+    var table_row_string = ""
+        + "<tr id='" + table_name + "'>"
+        + "    <td class='row-name'>" + table_name + "</td>"
+        + "    <td class='row-remove' >" + remove_button_string + "</td>"
+        + "</tr>";
+
+    console.log("table_row_string string");
+    console.log(table_row_string);
+    
+    $('#table-list-body').append(table_row_string);
+}

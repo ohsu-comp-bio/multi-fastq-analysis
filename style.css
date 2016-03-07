@@ -1,3 +1,57 @@
+html, body { 
+    height: 100%;
+}
+
+#file-list {
+    width: 17%;
+    height: 100%;
+}
+
+#results {
+    width: 47%
+}
+
+#queries {
+    width: 27%;
+}
+
+.column {
+    display: inline-block;
+    height: 100%;
+    float: left;
+}
+
+.material {
+    width: 100%;
+    background-color: #ADD8E6;
+    border: 1px solid blue;
+}
+
+.column-heading {
+    width: 100%;
+    background-color: #8FBC8F;
+    width: 100%;
+    border: 2px solid black;
+    padding: 1em;
+}
+
+#data-table {
+    background-color: #8FBC8F;
+    display: block;
+    position: relative;
+    height: 2em;
+    font-weigth: bold;
+}
+
+#load-file {
+    margin: 0.5em 0 0.5em 0;
+}
+
+#close-table {
+    font-weight: bold;
+    font-size: 1.3em;
+}
+
 table td,
 table th {
   border: 1px solid black;
@@ -8,6 +62,6 @@ table td {
 }
 
 #sql-string {
-	width:500px;
-	height: 50px;
+    width:500px;
+    height: 50px;
 }

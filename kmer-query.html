@@ -8,21 +8,59 @@
         <script src="http://alasql.org/console/xlsx.core.min.js"></script>
         <script src="http://alasql.org/console/Blob.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+        
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  
     </head>
     
 
-    <body
-        <h1>Test of alasql.js database: Sandbox</h1>
-        <button id="save-file">Save Table</button>
-        <input id="load-file" type="file" onchange="loadFile(event)"/>
-        <p>Enter SQL query:</p>
-        <textarea id="sql-string">
-			SELECT name,hired_on, YEAR(hired_on), MONTH(hired_on), DAY(hired_on) FROM employees ORDER BY hired_on DESC
-		</textarea>
-        <p><button id="run-query">Execute SQL</button></p>
-
-        <div id="result"></div>
-        <div id="res"></div>
+    <body>
+        <h1>AlaSQL Database Console</h1>
+        
+        <div id="alasql-console" class="row">
+            
+            <div class="column  col-md-2 col-xs-12" id="file-list">
+                <h2 class="column-heading">Tables</h2>
+                <div id="tables" class="material">
+                    <input id="load-file" type="file" onchange="loadFile(event)"/>
+                    <table id="table-list">
+                        <thead id="table-list-head">
+                            <tr>
+                                <th class="table-name">Table</th>
+                                <th class='row-remove'>Remove</th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody id="table-list-body">
+                        </tbody>
+                        
+                        <tfoot>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="column  col-md-6 col-xs-12" id="results">
+                <h2 class="column-heading">Results</h2>
+                <div class="material">
+                    <div id="result"></div>
+                </div>
+            </div>
+            
+            <div class="column  col-md-4 col-xs-12" id="query-list">
+                <h2 class="column-heading">Queries</h2>
+                <div class="material">
+                    <p>Enter SQL query:</p>
+                    <textarea id="sql-string">
+                        SELECT name,hired_on, YEAR(hired_on), MONTH(hired_on), DAY(hired_on) FROM employees ORDER BY hired_on DESC
+                    </textarea>
+                    <p><button id="run-query">Execute SQL</button></p>
+                <div id="res"></div>
+            </div>
+                
+            </div>
+        </div>
 
         <script src="run-sql.js"></script>
     </body>
