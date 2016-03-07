@@ -1,11 +1,24 @@
 var data;
 
-function loadFile(event) {
+function loadFile(event)
+{
 //	console.log('loadFile');
-	alasql('SELECT * FROM FILE(?,{headers:true})',[event],function(res){
+	alasql('SELECT * FROM FILE(?,{headers:true})',[event],function(res)
+    {
 		data = res;
 		document.getElementById("res").textContent = JSON.stringify(res);
 	});
+    
+    // alasql
+        // .promise('SELECT * FROM CSV("my.csv", {headers:true})')
+        // .then(function(data)
+            // {
+                // console.log(data);
+            // })
+        // .catch(function(err)
+            // {
+                // console.log('Error:', err);
+            // });
 }
 
 function saveFile() {

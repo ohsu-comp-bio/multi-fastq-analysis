@@ -12,18 +12,9 @@
     
 
     <body
-    
-    	<h1>File load and save</h1>
-		<p>Upload file here</p>
-		<input id="load-file" type="file" />
-		<input id="load-file-2" type="file" onChange="loadFile()"/>
-		<p>Save file here:</p>
-		<button onclick="saveFile()">Save file</button>
-		<div id="res"></div>
-    
         <h1>Test of alasql.js database: Sandbox</h1>
         <button id="save-file">Save Table</button>
-        <input id="not-used" type="file" />
+        <input id="load-file" type="file" onchange="loadFile(event)"/>
         <p>Enter SQL query:</p>
         <textarea id="sql-string">
 			SELECT name,hired_on, YEAR(hired_on), MONTH(hired_on), DAY(hired_on) FROM employees ORDER BY hired_on DESC

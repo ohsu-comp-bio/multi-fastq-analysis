@@ -18,21 +18,24 @@ $("#run-query").on('click',function()
 	runSQL(sql_string);
 });
 
-$("#load-file").on('change',function(event)
-{
-	for (var i = 0 ; i < event.length ; i++)
-	{
-		console.log("event " + i + ": " + e);
-	}
-	console.log("in onclick");
-	//loadFile(event);
-	closed()
-});
+// $("#load-file").on('change',function(event)
+// {
+    // console.log("in onclick");
+	// console.log(event); 
+	// loadFile(event);
+    // filename = $('#load-file').val();
+    // alasql('SELECT * FROM FILE("' + filename + '",{headers:true})',function(res){
+		// data = res;
+		// document.getElementById("res").textContent = JSON.stringify(res);
+	// });
+	// closed()
+// });
 
 $("#save-file").on('click',function(){saveTable();});
 
 function loadFile(event) {
 	console.log('loadFile');
+    console.log(event);
 	alasql('SELECT * FROM FILE(?,{headers:true})',[event],function(res){
 		data = res;
 		document.getElementById("res").textContent = JSON.stringify(res);
@@ -148,10 +151,105 @@ function runSQL(sql_string)
 }
 
 
-function makeTableFromJSON(table_name, data)
+function makeTableFromJSON(database, table_name, json_data)
 {
+    
+    database.exec("CREATE TABLE " + table_name + " ")
+    
+	function insert(table, values)
+    {
+        values = ", ".join(values);
+        database.exec("INSERT INTO " + table + " VALUES (" + values + ");");
+    }
 	
-	
+}
+
+function Table(database, name, data, schema)
+{
+    this.db = database;
+    this.name = name;
+    this.schema = schema;
+    this.data = data;
+    
+    schema_set = typeof this.schema == 'undefined' ? false : true;
+
+    if (typeof this.data != 'undefined')
+    {
+        this.ingestData(this.data);
+    }
+}
+
+Table.prototpye = 
+{
+    var this.ingestData = function(data)
+    {
+        if (!schema_set)
+        {
+            this.inferSchema(data);
+        }
+        
+        for (var row in data)
+        {
+            this.insertRow(row);
+        }
+    }
+    
+    var this.inferSchema = function(data)
+    {
+        if (typeof this.data == 'undefined')
+        {
+            console.log("Cannot infer schema. No data supplied");
+            return false;
+        }
+        var row = data[0];
+        schema = {};
+        for (var field in row)
+        {
+            schema[field] = typeof row[field];
+        }
+        this.schema_set = true;
+    }
+        
+    var this.createTable()
+    {
+        
+        if (!schema_set)
+        {
+            var schema_created = inferSchema(this.data)
+                    
+            if (!schema_created)
+            {
+                console.log("Cannot create table. Schema cannot be inferred. Perhaps no data supplied");
+                return false
+            }
+        }
+        
+        for (field in this.schema)
+        {
+            datatype = typeof this.schema[field];
+            schema_array.push(field + " " + datatype);
+        }
+        var schema_string = ", ".join(schema_array);
+        
+        this.db.exec("CREATE TABLE " + this.name + "(" + schema_string + ")");
+    }
+    
+    var this.insertRow = function(row)
+    {
+        if (typeof table == 'undefined')
+        {
+            this.createTable();
+        }
+        
+        var values_array = [];
+        for (var field in row)
+        {
+            values_array.push(row[field]);
+        }
+        var values_string = ", ".join(values_array);
+        database.exec("INSERT INTO " + table + " VALUES (" + values_string + ");");
+    }
+     
 }
 
 
