@@ -1,4 +1,4 @@
-Name, Age, FavoriteColor
-Bob, 11, Green
+Name, Age,    FavoriteColor
+Bob,   11,    Green
 Sue, 48, Red
-Pat, 23, Purple
+  Pat, 23, Purple

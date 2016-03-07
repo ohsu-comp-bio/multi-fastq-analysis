@@ -8,66 +8,92 @@ var testvar;
 
 function closed()
 {
-	console.log("in closed" + data);
+    console.log("in closed" + data);
 }
 
 $("#run-query").on('click',function()
 {
-	sql_string = $("#sql-string").val();
-	console.log("sql_string: " + sql_string);
-	runSQL(sql_string);
+    sql_string = $("#sql-string").val();
+    console.log("sql_string: " + sql_string);
+    runSQL(sql_string);
 });
 
 // $("#load-file").on('change',function(event)
 // {
     // console.log("in onclick");
-	// console.log(event); 
-	// loadFile(event);
+    // console.log(event); 
+    // loadFile(event);
     // filename = $('#load-file').val();
     // alasql('SELECT * FROM FILE("' + filename + '",{headers:true})',function(res){
-		// data = res;
-		// document.getElementById("res").textContent = JSON.stringify(res);
-	// });
-	// closed()
+        // data = res;
+        // document.getElementById("res").textContent = JSON.stringify(res);
+    // });
+    // closed()
 // });
 
 $("#save-file").on('click',function(){saveTable();});
 
 function loadFile(event) {
-	console.log('loadFile');
+    console.log('loadFile');
     console.log(event);
-	alasql('SELECT * FROM FILE(?,{headers:true})',[event],function(res){
-		data = res;
-		document.getElementById("res").textContent = JSON.stringify(res);
-	});
+    alasql('SELECT * FROM FILE(?,{headers:true})',[event],function(res){
+        data_string = JSON.stringify(res);
+        console.log(data_string);
+        data_string = data_string.replace(/"[ \t]+/g, '"');
+        console.log(data_string);
+        data = JSON.parse(data_string);
+        console.log(data);
+        document.getElementById("res").textContent = JSON.stringify(res);
+        var filename = $('#load-file').val();
+        filename = filename.replace(/^.*[\\\/]/,'');
+        //filename = filename.replace(/^.*\/([^/]*)$/, "$1");
+        console.log(filename);
+        filename = filename.split('.');
+        console.log(filename);
+        filename = filename[0];
+        console.log("filename: " + filename);
+        createTable(filename, data);
+    });
+}
+
+
+function createTable(filename, data) {
+  console.log("create table");
+  console.log("data: " + data);
+  var cmd_string = "CREATE TABLE " + filename;
+  console.log(cmd_string);
+  db.exec(cmd_string);
+  cmd_string = "INSERT INTO " + filename + " SELECT * FROM ?";
+  console.log(cmd_string);
+  db.exec(cmd_string, [data]);
 }
 
 
 //function loadFile(event) {
-	//console.log('loadFile');
-	//for (var i = 0 ; i < event.length ; i++)
-	//{
-		//console.log("event " + i + ": " + e);
-	//}
-	//alasql('SELECT * FROM FILE(?,{headers:true})',[event],function(res){
-		//data = res;
-		//document.getElementById("res").textContent = JSON.stringify(res);
-		//console.log("after setting test content: " + data);
-		//closed();
-	//});
-	//console.log(data);
+    //console.log('loadFile');
+    //for (var i = 0 ; i < event.length ; i++)
+    //{
+        //console.log("event " + i + ": " + e);
+    //}
+    //alasql('SELECT * FROM FILE(?,{headers:true})',[event],function(res){
+        //data = res;
+        //document.getElementById("res").textContent = JSON.stringify(res);
+        //console.log("after setting test content: " + data);
+        //closed();
+    //});
+    //console.log(data);
 //}
 
 function saveFile() {
-	console.log('saveFile');
-	alasql('SELECT * INTO XLSX("myfile.xlsx",{headers:true}) FROM ?',[data]);
+    console.log('saveFile');
+    alasql('SELECT * INTO XLSX("myfile.xlsx",{headers:true}) FROM ?',[data]);
 }
 
 
 //function saveTable(type)
-//{	
-	//type = typeof type != 'undefined' ? type : "XLSX";
-	//console.log("saving table");
+//{ 
+    //type = typeof type != 'undefined' ? type : "XLSX";
+    //console.log("saving table");
     
     ///*
     //type.toUpperCase(type);
@@ -106,48 +132,49 @@ function saveFile() {
     //alasql("SELECT * INTO " + extension + " ('" + filename + "') FROM ?",[data]);
 //}
 
-function runSQL(sql_string)
+function runSQL()
 {
-	var s = '';
-	//var sql_string = document.getElementById('sql-string').value;
-	console.log(sql_string);
-	commands = sql_string.split(';');
-	console.log("commands: " + commands);
-	
-	commands.forEach(function(command)
-	{
-		console.log("command: " + command);
-		command = command.trim();
-		
-		if (command)
-		{
-			//var result = db.exec(command);
-			var result = alasql(command, data);
-			//		console.log(document.getElementById('sql').value);
-			s += '<table style="border:1px solid black">';
-			s += '<tr>';
+    console.log('run_sql');
+    var s = '';
+    var sql_string = document.getElementById('sql-string').value;
+    console.log(sql_string);
+    commands = sql_string.split(';');
+    console.log("commands: " + commands);
+    
+    commands.forEach(function(command)
+    {
+        console.log("command: " + command);
+        command = command.trim();
+        
+        if (command)
+        {
+            var result = db.exec(command);
+            //var result = alasql(command, data);
+            //      console.log(document.getElementById('sql').value);
+            s += '<table style="border:1px solid black">';
+            s += '<tr>';
 
-			for (var key in result[0])
-			{
-				s += '<th style="width:100px">' + key;
-			}
+            for (var key in result[0])
+            {
+                s += '<th style="width:100px">' + key;
+            }
 
-			result.forEach(function(row)
-			{
-				s += '<tr>';
-				for (var key in row)
-				{
-					s += '<td>' + (typeof row[key] == 'undefined' ? '' : row[key]);
-				}
-			});
+            result.forEach(function(row)
+            {
+                s += '<tr>';
+                for (var key in row)
+                {
+                    s += '<td>' + (typeof row[key] == 'undefined' ? '' : row[key]);
+                }
+            });
 
-			s += '</table>';
+            s += '</table>';
 
-		}
-	});
-	
-	document.getElementById('result').innerHTML = s;
-	
+        }
+    });
+    
+    document.getElementById('result').innerHTML = s;
+    
 }
 
 
@@ -156,101 +183,101 @@ function makeTableFromJSON(database, table_name, json_data)
     
     database.exec("CREATE TABLE " + table_name + " ")
     
-	function insert(table, values)
+    function insert(table, values)
     {
         values = ", ".join(values);
         database.exec("INSERT INTO " + table + " VALUES (" + values + ");");
     }
-	
+    
 }
 
-function Table(database, name, data, schema)
-{
-    this.db = database;
-    this.name = name;
-    this.schema = schema;
-    this.data = data;
+//function Table(database, name, data, schema)
+//{
+    //this.db = database;
+    //this.name = name;
+    //this.schema = schema;
+    //this.data = data;
     
-    schema_set = typeof this.schema == 'undefined' ? false : true;
+    //schema_set = typeof this.schema == 'undefined' ? false : true;
 
-    if (typeof this.data != 'undefined')
-    {
-        this.ingestData(this.data);
-    }
-}
+    //if (typeof this.data != 'undefined')
+    //{
+        //this.ingestData(this.data);
+    //}
+//}
 
-Table.prototpye = 
-{
-    var this.ingestData = function(data)
-    {
-        if (!schema_set)
-        {
-            this.inferSchema(data);
-        }
+//Table.prototpye = 
+//{
+    //var this.ingestData = function(data)
+    //{
+        //if (!this.schema_set)
+        //{
+            //this.inferSchema(data);
+        //}
         
-        for (var row in data)
-        {
-            this.insertRow(row);
-        }
-    }
+        //for (var row in data)
+        //{
+            //this.insertRow(row);
+        //}
+    //}
     
-    var this.inferSchema = function(data)
-    {
-        if (typeof this.data == 'undefined')
-        {
-            console.log("Cannot infer schema. No data supplied");
-            return false;
-        }
-        var row = data[0];
-        schema = {};
-        for (var field in row)
-        {
-            schema[field] = typeof row[field];
-        }
-        this.schema_set = true;
-    }
+    //var inferSchema = function(data)
+    //{
+        //if (typeof this.data == 'undefined')
+        //{
+            //console.log("Cannot infer schema. No data supplied");
+            //return false;
+        //}
+        //var row = data[0];
+        //schema = {};
+        //for (var field in row)
+        //{
+            //schema[field] = typeof row[field];
+        //}
+        //this.schema_set = true;
+    //}
         
-    var this.createTable()
-    {
+    //var this.createTable()
+    //{
         
-        if (!schema_set)
-        {
-            var schema_created = inferSchema(this.data)
+        //if (!this.schema_set)
+        //{
+            //var schema_created = inferSchema(this.data)
                     
-            if (!schema_created)
-            {
-                console.log("Cannot create table. Schema cannot be inferred. Perhaps no data supplied");
-                return false
-            }
-        }
+            //if (!schema_created)
+            //{
+                //console.log("Cannot create table. Schema cannot be inferred. Perhaps no data supplied");
+                //return false
+            //}
+        //}
         
-        for (field in this.schema)
-        {
-            datatype = typeof this.schema[field];
-            schema_array.push(field + " " + datatype);
-        }
-        var schema_string = ", ".join(schema_array);
+        //for (field in this.schema)
+        //{
+            //datatype = typeof this.schema[field];
+            //schema_array.push(field + " " + datatype);
+        //}
+        //var schema_string = ", ".join(schema_array);
         
-        this.db.exec("CREATE TABLE " + this.name + "(" + schema_string + ")");
-    }
+        //this.db.exec("CREATE TABLE " + this.name + "(" + schema_string + ")");
+    //}
     
-    var this.insertRow = function(row)
-    {
-        if (typeof table == 'undefined')
-        {
-            this.createTable();
-        }
+    //var this.insertRow = function(row)
+    //{
+        //if (typeof table == 'undefined')
+        //{
+            //this.createTable();
+        //}
         
-        var values_array = [];
-        for (var field in row)
-        {
-            values_array.push(row[field]);
-        }
-        var values_string = ", ".join(values_array);
-        database.exec("INSERT INTO " + table + " VALUES (" + values_string + ");");
-    }
+        //var values_array = [];
+        //for (var field in row)
+        //{
+            //values_array.push(row[field]);
+        //}
+        //var values_string = ", ".join(values_array);
+        //database.exec("INSERT INTO " + table + " VALUES (" + values_string + ");");
+    //}
      
-}
+//}
 
 
 db.exec("DROP TABLE IF EXISTS employees");
@@ -272,7 +299,7 @@ db.exec("INSERT INTO employees VALUES (11,'ADAMS','ENGINEER',10,'1996-03-15',340
 db.exec("INSERT INTO employees VALUES (12,'WASHINGTON','ADMIN',6,'1998-04-16',18000,NULL,4);");
 db.exec("INSERT INTO employees VALUES (13,'MONROE','ENGINEER',10,'2000-12-03',30000,NULL,2);");
 db.exec("INSERT INTO employees VALUES (14,'ROOSEVELT','CPA',9,'1995-10-12',35000,NULL,1);");
-//	SELECT designation,COUNT(*) AS nbr, (AVG(salary)) AS avg_salary FROM employees GROUP BY designation ORDER BY avg_salary DESC;
-//runSQL();
+//  SELECT designation,COUNT(*) AS nbr, (AVG(salary)) AS avg_salary FROM employees GROUP BY designation ORDER BY avg_salary DESC;
+runSQL();
 
 
