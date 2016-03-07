@@ -23,5 +23,17 @@ https://github.com/agershun/alasql/wiki/How-to-upload-form-for-txt-and-xlsx-in-j
 
 http://www.slideshare.net/AndreyGershun/alasql-manual-141220-1
 
+## From Wiki
+https://github.com/agershun/alasql/wiki/How-to-insert-data-into-the-table
+
+https://github.com/agershun/alasql/wiki/json
+
+## Additional 
+https://gitlab.com/Shekharrajak/alasql
+
+## Online Demo
+http://alasql.org/codex/start.html
+
+
 
 
