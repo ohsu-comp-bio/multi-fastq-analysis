@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <!--script src="http://alasql.org/console/alasql.min.js"></script-->
+        <script src="http://cdn.jsdelivr.net/alasql/latest/alasql.min.js"></script-->
+        <script src="http://alasql.org/console/xlsx.core.min.js"></script>
+        <script src="http://alasql.org/console/Blob.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+        
+        <style>
+            table td,
+            table th {
+              border: 1px solid black;
+            }
+
+            table td {
+              text-align: right;
+            }
+
+            #sql-string {
+                width:500px;
+                height: 50px;
+            }
+
+        </style>
+    </head>
+    
+
+    <body
+        <h1>Test of alasql.js database: Sandbox</h1>
+        <button id="save-file">Save Table</button>
+        <input id="load-file" type="file" onchange="loadFile(event)"/>
+        <p>Enter SQL query:</p>
+        <textarea id="sql-string">
+            SELECT name,hired_on, YEAR(hired_on), MONTH(hired_on), DAY(hired_on) FROM employees ORDER BY hired_on DESC
+        </textarea>
+        <p><button id="run-query">Execute SQL</button></p>
+
+        <div id="result"></div>
+        <div id="res"></div>
+
+        <script src="run-sql.js"></script>
+    </body>
+
+</html>

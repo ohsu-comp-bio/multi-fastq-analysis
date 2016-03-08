@@ -28,10 +28,13 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=2
-FILE_NAME_0=83;HTML;0;EUTF-8;0;1;0;%2FLibrary%2FWebServer%2FDocuments%2Fmulti-fastq-analysis%2Fkmer-query.html;0;4
-FILE_NAME_1=374;Javascript;0;EUTF-8;0;1;0;%2FLibrary%2FWebServer%2FDocuments%2Fmulti-fastq-analysis%2Frun-sql.js;0;4
-FILE_NAME_2=49;CSS;0;EUTF-8;0;1;0;%2FLibrary%2FWebServer%2FDocuments%2Fmulti-fastq-analysis%2Fstyle.css;0;4
+current_page=1
+FILE_NAME_0=1361;HTML;0;EUTF-8;0;1;0;%2FLibrary%2FWebServer%2FDocuments%2Fmulti-fastq-analysis%2Fkmer-query.html;0;4
+FILE_NAME_1=2552;Javascript;0;EUTF-8;0;1;0;%2FLibrary%2FWebServer%2FDocuments%2Fmulti-fastq-analysis%2Frun-sql.js;0;4
+FILE_NAME_2=679;CSS;0;EUTF-8;0;1;0;%2FLibrary%2FWebServer%2FDocuments%2Fmulti-fastq-analysis%2Fstyle.css;0;4
+FILE_NAME_3=63;None;0;EUTF-8;0;1;0;%2FLibrary%2FWebServer%2FDocuments%2Fmulti-fastq-analysis%2Fsample.csv;0;4
+FILE_NAME_4=729;HTML;0;EUTF-8;0;1;0;%2FLibrary%2FWebServer%2FDocuments%2Fmulti-fastq-analysis%2Fload-table-test.html;0;4
+FILE_NAME_5=20;None;0;EUTF-8;0;1;0;%2FLibrary%2FWebServer%2FDocuments%2Fmulti-fastq-analysis%2Fcsv2.csv;0;4
 
 [VTE]
 last_dir=/Users/balter

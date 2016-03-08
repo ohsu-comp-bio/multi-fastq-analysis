@@ -76,8 +76,10 @@ function createTable(filename, data) {
   //$('#'+filename).css(data_table_styles);
 }
 
-$('.close-table').on('click', function(){
+$('.row-remove').on('click', function(){
+    console.log("removging row");
     var table_name = this.parent().attr('id');
+    console.log("removing: " + table_name);
     db.exec("DROP TABLE " + table_name);
     this.remove();
 });
@@ -323,7 +325,7 @@ runSQL("SELECT designation,COUNT(*) AS nbr, (AVG(salary)) AS avg_salary FROM emp
 function addTableRow(table_name)
 {
     var remove_button_string = ""
-        + "<button type='button' id='" + item.ItemId + "-remove' class='remove-button btn btn-default btn-xs'>"
+        + "<button type='button' id='" + table_name + "-remove' class='remove-button btn btn-default btn-xs'>"
         + "<span class='glyphicon glyphicon-remove'></span>"
         + "</button>";
         
